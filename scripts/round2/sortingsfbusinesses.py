@@ -6,8 +6,8 @@ from datetime import datetime
 file_time = datetime.now()
 time_string = file_time.strftime('%Y-%m-%d_%H-%M-%S')
 #20150605sfbusinesses
-allsfbiz = os.path.join('..','..', '20150407sfbusinesses', 'original_20150422_Registered_Business_Locations_-_San_Francisco.csv')
-startdatesfile = os.path.join('..','..','20150407sfbusinesses','lateststartdatesentries','lateststartdates_entries_sfdata_{}.csv'.format(time_string))
+allsfbiz = os.path.join('..','..', '20150605sfbusinesses', 'Registered_Business_Locations_-_San_Francisco.csv')
+startdatesfile = os.path.join('..','..','20150605sfbusinesses','round2results','cleaned_data_round2_{}.csv'.format(time_string))
 
 with open(allsfbiz, 'rU') as fullsflist, open(startdatesfile,'wb') as results:
 	sfdatareader = csv.DictReader(fullsflist)
@@ -25,8 +25,8 @@ with open(allsfbiz, 'rU') as fullsflist, open(startdatesfile,'wb') as results:
 	for row in sfdatareader:
 		nameandaddress = row['DBA Name'] + " " + row['Street_Address'] # accounts for biz's with multiple addresses
 		bizid = row['Location_ID']
-		startdate = datetime.strptime(row['Business_Start_Date'], "%m/%d/%y") if row['Business_Start_Date'] else None
-		enddate = datetime.strptime(row['Location_End_Date'], "%m/%d/%y") if row['Location_End_Date'] else None
+		startdate = datetime.strptime(row['Business_Start_Date'], "%m/%d/%Y") if row['Business_Start_Date'] else None
+		enddate = datetime.strptime(row['Location_End_Date'], "%m/%d/%Y") if row['Location_End_Date'] else None
 		#if nameandaddress in all_names:
 		if startdate and (nameandaddress not in firststartdates or startdate < firststartdates[nameandaddress]):
 			firststartdates[nameandaddress] = startdate
@@ -35,7 +35,7 @@ with open(allsfbiz, 'rU') as fullsflist, open(startdatesfile,'wb') as results:
 		if enddate and (nameandaddress not in enddates or enddate > enddates[nameandaddress]):
 			enddates[nameandaddress] = enddate
 	
-	cities = ['San Francisco', 'SAN FRANCISCO', '', 'SAN FRANCISO',  'SAN  FRANCISCO', 'SAN FRANICSCO', 'SAN FRANCSICO', 'SAN FRANACISCO', 'SAN FRACISCO', 'SAN FRANCISCI', 'SAN  FRACISCO', 'SAN FRANCISCCO', 'SAN FRANCISCQ', 'SAN FRANCISCOQ', 'SAM FRANCISCO', 'SAN FRAANCISCO', 'SAN FRANCISOCO', 'SAN FRANCISC', 'san francisco', 'SANFRANCISCO',  'SAN FRANCISCP', 'NORTH HIGHLAND', 'SAN FRNCISCO', 'SAN FRANCICO', 'SAN FRANCIASO',  'SAN FARNCISCO','SAN FRANCISCO CA',  'SAN FRANCISCSO', 'SAN FRANCICSO', 'SAN FRANCOSCO', 'SN AFRANCISCO', 'SN FRANCISCO']
+	cities = ['San Francisco', 'SAN FRANCISCO', '', 'SAN FRANCISO',  'SAN  FRANCISCO', 'SAN FRANICSCO', 'SAN FRANCSICO', 'SAN FRANACISCO', 'SAN FRACISCO', 'SAN FRANCISCI', 'SAN  FRACISCO', 'SAN FRANCISCCO', 'SAN FRANCISCQ', 'SAN FRANCISCOQ', 'SAM FRANCISCO', 'SAN FRAANCISCO', 'SAN FRANCISOCO', 'SAN FRANCISC', 'san francisco', 'SANFRANCISCO',  'SAN FRANCISCP', 'SAN FRNCISCO', 'SAN FRANCICO', 'SAN FRANCIASO',  'SAN FARNCISCO','SAN FRANCISCO CA',  'SAN FRANCISCSO', 'SAN FRANCICSO', 'SAN FRANCOSCO', 'SN AFRANCISCO', 'SN FRANCISCO']
 
 	#stores names and addresses for all last start dates entries that also have a location end date or business end date. 
 	fullsflist.seek(0)
@@ -43,9 +43,9 @@ with open(allsfbiz, 'rU') as fullsflist, open(startdatesfile,'wb') as results:
 	for row in sfdatareader:
 		nameandaddress = row['DBA Name'] + " " + row['Street_Address']
 		bizid = row['Location_ID']
-		startdate = datetime.strptime(row['Business_Start_Date'], "%m/%d/%y")
-		loc_enddate = datetime.strptime(row['Location_End_Date'], "%m/%d/%y") if row['Location_End_Date'] else None
-		biz_enddate = datetime.strptime(row['Business_End_Date'], "%m/%d/%y") if row['Business_End_Date'] else None
+		startdate = datetime.strptime(row['Business_Start_Date'], "%m/%d/%Y")
+		loc_enddate = datetime.strptime(row['Location_End_Date'], "%m/%d/%Y") if row['Location_End_Date'] else None
+		biz_enddate = datetime.strptime(row['Business_End_Date'], "%m/%d/%Y") if row['Business_End_Date'] else None
 		name = row['DBA Name']
 		address = row['Street_Address']
 		if (loc_enddate or biz_enddate) and startdate == laststartdates[nameandaddress] and row['City'] in cities:
